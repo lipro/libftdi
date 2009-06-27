@@ -32,7 +32,7 @@ on this file might be covered by the GNU General Public License.
 #include <list>
 #include <string>
 #include <boost/shared_ptr.hpp>
-#include "ftdi.h"
+#include <ftdi.h>
 
 namespace Ftdi
 {
