@@ -163,7 +163,7 @@ struct ftdi_context *ftdi_new(void)
 */
 int ftdi_set_interface(struct ftdi_context *ftdi, enum ftdi_interface interface)
 {
-    if (ftdi == NULL || ftdi->usb_dev == NULL)
+    if (ftdi == NULL)
         ftdi_error_return(-2, "USB device unavailable");
 
     switch (interface)
