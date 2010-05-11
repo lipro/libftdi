@@ -114,8 +114,8 @@ if(DOCUMENTATION AND DOXYGEN_FOUND)
    # Create doc directory
    add_custom_command(
    OUTPUT ${CMAKE_BINARY_DIR}/doc
-   COMMAND rm -rf ${CMAKE_BINARY_DIR}/doc
-   COMMAND mkdir ${CMAKE_BINARY_DIR}/doc
+   COMMAND rm -rf ${CMAKE_BINARY_DIR}/doc/{html,man}
+   COMMAND mkdir -p ${CMAKE_BINARY_DIR}/doc
    DEPENDS ftdi ftdipp
    )
 
