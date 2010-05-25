@@ -17,7 +17,7 @@ all-local:	ftdi_wrap.c ftdi.py
 		$(PYTHON) setup.py build --compiler=mingw32 \
 	  ;; \
 	  *) \
-		$(PYTHON) setup.py build \
+		CPPFLAGS="$(CPPFLAGS)" $(PYTHON) setup.py build \
 	  ;; \
 	esac;
 
@@ -36,7 +36,7 @@ install-exec-local:
 		$(PYTHON) setup.py install --prefix="$$NATIVE_WINDOWS_PREFIX" \
 	  ;; \
 	  *) \
-		$(PYTHON) setup.py install --prefix=$(DESTDIR)$(prefix) \
+		CPPFLAGS="$(CPPFLAGS)" $(PYTHON) setup.py install --prefix=$(DESTDIR)$(prefix) \
 	  ;; \
 	esac;
 
