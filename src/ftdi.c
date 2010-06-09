@@ -497,7 +497,7 @@ int ftdi_usb_open_dev(struct ftdi_context *ftdi, struct usb_device *dev)
             }
             else
             {
-                ftdi_error_return(-3, "unable to set usb configuration. Make sure ftdi_sio is unloaded!");
+                ftdi_error_return(-3, "unable to set usb configuration. Make sure the default FTDI kernel side driver is unloaded.");
             }
         }
     }
@@ -512,7 +512,7 @@ int ftdi_usb_open_dev(struct ftdi_context *ftdi, struct usb_device *dev)
         }
         else
         {
-            ftdi_error_return(-5, "unable to claim usb device. Make sure ftdi_sio is unloaded!");
+            ftdi_error_return(-5, "unable to claim usb device. Make sure the default FTDI kernel side driver is unloaded.");
         }
     }
 
