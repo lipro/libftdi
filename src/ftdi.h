@@ -352,6 +352,7 @@ extern "C"
 
     /* init and build eeprom from ftdi_eeprom structure */
     void ftdi_eeprom_initdefaults(struct ftdi_eeprom *eeprom);
+    void ftdi_eeprom_free(struct ftdi_eeprom *eeprom);
     int ftdi_eeprom_build(struct ftdi_eeprom *eeprom, unsigned char *output);
     int ftdi_eeprom_decode(struct ftdi_eeprom *eeprom, unsigned char *output, int size);
 

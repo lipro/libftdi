@@ -2132,6 +2132,27 @@ void ftdi_eeprom_initdefaults(struct ftdi_eeprom *eeprom)
 }
 
 /**
+    Frees allocated memory in eeprom.
+
+    \param eeprom Pointer to ftdi_eeprom
+*/
+void ftdi_eeprom_free(struct ftdi_eeprom *eeprom)
+{
+    if (eeprom->manufacturer != 0) {
+        free(eeprom->manufacturer);
+        eeprom->manufacturer = 0;
+    }
+    if (eeprom->product != 0) {
+        free(eeprom->product);
+        eeprom->product = 0;
+    }
+    if (eeprom->serial != 0) {
+        free(eeprom->serial);
+        eeprom->serial = 0;
+    }
+}
+
+/**
     Build binary output from ftdi_eeprom structure.
     Output is suitable for ftdi_write_eeprom().
 
