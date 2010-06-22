@@ -85,7 +85,13 @@ fi
 AM_CONDITIONAL(HAVE_LIBFTDIPP, [test "x$ENABLE_LIBFTDIPP" = "x1"])
 
 dnl check for doxygen
-AC_PATH_PROG(DOXYGEN, doxygen)
+AC_ARG_WITH(docs,
+  AS_HELP_STRING([--without-docs], [disable doxygen usage]))
+if test "x$with_docs" != "xno"; then
+  AC_PATH_PROG(DOXYGEN, doxygen)
+else
+  DOXYGEN=
+fi
 AM_CONDITIONAL(HAVE_DOXYGEN, test -n $DOXYGEN)
 
 dnl ============================
