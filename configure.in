@@ -8,7 +8,7 @@ AM_PROG_LIBTOOL
 AC_PROG_CXX
 
 dnl check for libusb-config
-AC_PATH_PROG(HAVELIBUSB, libusb-config, $PATH)
+AC_CHECK_TOOL(HAVELIBUSB, libusb-config)
 
 if test ! -z "$HAVELIBUSB"; then
    LIBUSB_CFLAGS=`$HAVELIBUSB --cflags`
