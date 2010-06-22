@@ -10,7 +10,8 @@ examples_libftdipp =
 endif
 
 
-bin_PROGRAMS = simple \
+if BUILD_EXAMPLES
+all_examples = simple \
 	bitbang       \
 	bitbang2      \
 	bitbang_ft2232 \
@@ -19,6 +20,10 @@ bin_PROGRAMS = simple \
 	serial_read \
 	baud_test \
 	$(examples_libftdipp)
+else
+all_examples =
+endif
+bin_PROGRAMS = $(all_examples)
 
 # Don't install the example files
 AM_LDFLAGS = -no-install

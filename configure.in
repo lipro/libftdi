@@ -47,6 +47,10 @@ AC_ARG_WITH(async-mode,
 ])
 AC_SUBST(ENABLE_ASYNC_MODE)
 
+AC_ARG_WITH(examples,
+  AS_HELP_STRING([--without-examples], [disable example programs]))
+AM_CONDITIONAL(BUILD_EXAMPLES, [test "x$with_examples" != "xno"])
+
 LIBFTDI_MODULES=
 LIBFTDI_MODULES_PKGCONFIG=
 
