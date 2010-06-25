@@ -10,7 +10,8 @@
   - src/Makefile.am
   - ftdipp/Makefile.am
 
-- Run "make dist"
+- Run:
+  autoreconf -f -i && ./configure && make dist
 
 - Diff tarball to previous version, check if all
   important changes are in the ChangeLog
