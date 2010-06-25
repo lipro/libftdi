@@ -2138,6 +2138,9 @@ void ftdi_eeprom_initdefaults(struct ftdi_eeprom *eeprom)
 */
 void ftdi_eeprom_free(struct ftdi_eeprom *eeprom)
 {
+    if (!eeprom)
+        return;
+
     if (eeprom->manufacturer != 0) {
         free(eeprom->manufacturer);
         eeprom->manufacturer = 0;
