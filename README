@@ -20,7 +20,15 @@ the initial C++ wrapper implementation.
 
 Changes
 -------
-* Insert 0.18 changelog here
+* Add ftdi_eeprom_free() to free allocated memory in eeprom (Wilfried Holzke)
+* More generic error message for the FTDI kernel driver (Intra2net)
+* Honor CPPFLAGS in python wrapper build (Alexander Lehmann)
+* cmake: Fix package creation on 32-bit machines (Uwe Bonnes)
+* Fix swig argument constraints (Intra2net)
+* Don't segfault if device is closed or ftdi context is invalid (Intra2net)
+* Ability to disable build of examples / documentation (Mike Frysinger and Intra2net)
+* Fix typo in python wrapper build (Mike Frysinger)
+* Autoconf build system improvements (Mike Frysinger)
 
 You'll find the newest version of libftdi at:
 http://www.intra2net.com/en/developer/libftdi
