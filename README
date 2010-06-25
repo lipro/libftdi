@@ -1,5 +1,5 @@
 --------------------------------------------------------------------
-libftdi version 0.17
+libftdi version 0.18
 --------------------------------------------------------------------
 
 libftdi - A library (using libusb) to talk to FTDI's UART/FIFO chips
@@ -20,21 +20,11 @@ the initial C++ wrapper implementation.
 
 Changes
 -------
-* C++ wrapper: Reopen the device after calling get_strings() in Context::open() (Marek Vavruša and Intra2net)
-* C++ wrapper: Fixed an inheritance problem (Marek Vavruša and Intra2net)
-* C++ wrapper: Relicensed under GPLv2 + linking exception (Marek Vavruša and Intra2net)
-* Support for FT2232H and FT4232H (David Challis, Alex Harford and Intra2net)
-* Support for mingw cross compile (Uwe Bonnes)
-* Python bindings and minor autoconf cleanup (Tarek Heiland)
-* Code cleanup in various places (Intra2net)
-* Fixed ftdi_read_chipid in some cases (Matthias Richter)
-* eeprom decode function and small cleanups (Marius Kintel)
-* cmake system improvements (Marius Kintel and Intra2net)
-* Fix compilation in -ansi -pedantic mode (Matthias Janke)
+* Insert 0.18 changelog here
 
 You'll find the newest version of libftdi at:
 http://www.intra2net.com/en/developer/libftdi
 
 --------------------------------------------------------------------
-www.intra2net.com                             2003-2009 Intra2net AG
+www.intra2net.com                             2003-2010 Intra2net AG
 --------------------------------------------------------------------
