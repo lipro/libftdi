@@ -48,6 +48,8 @@ examples/simple
 
 # python bindings
 bindings/python/setup.py
+bindings/python/ftdi.py
+bindings/python/ftdi_wrap.c
 
 # Backup files and stuff from patches
 *.orig
