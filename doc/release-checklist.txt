@@ -22,7 +22,7 @@
 
 - Create git tag:
   - git tag -s -u 24F006F5 v0.XX
-  - git tag -d latest-release ; git tag latest-release
+  - git tag -d latest_release ; git tag latest_release
   - git push --tags
 
 - Website
