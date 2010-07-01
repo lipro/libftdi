@@ -55,6 +55,7 @@ bindings/python/ftdi_wrap.c
 *.orig
 *.rej
 *~
+.*.swp
 
 # libftdi specific
 libftdi-config
