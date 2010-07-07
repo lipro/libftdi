@@ -38,7 +38,6 @@
 /* stuff needed for async write */
 #ifdef LIBFTDI_LINUX_ASYNC_MODE
 #include <sys/ioctl.h>
-#include <sys/time.h>
 #include <sys/select.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -78,6 +77,10 @@ int gettimeofday(  struct timeval *tv, void null)
     /* Warning: Timezone not handled (and not needed here) */
     return 0;
 }
+#else
+    // Include sys/time.h on non-Windows platforms
+    // as gettimeofday() needs it.
+    #include <sys/time.h>
 #endif
 
 /**
