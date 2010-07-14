@@ -2,6 +2,8 @@
 %module ftdi
 %include "typemaps.i"
 %include "cpointer.i"
+%pointer_functions(unsigned int, uintp);
+
 %typemap(in) unsigned char* = char*;
 %ignore ftdi_write_data_async;
 %ignore ftdi_async_complete;
