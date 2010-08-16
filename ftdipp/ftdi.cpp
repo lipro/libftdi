@@ -283,7 +283,7 @@ int Context::bitbang_disable()
 
 int Context::set_bitmode(unsigned char bitmask, unsigned char mode)
 {
-    return set_bitmode(bitmask, mode);
+    return ftdi_set_bitmode(d->ftdi, bitmask, mode);
 }
 
 int Context::set_bitmode(unsigned char bitmask, enum ftdi_mpsse_mode mode)
