@@ -229,6 +229,55 @@ struct ftdi_device_list
     struct usb_device *dev;
 };
 
+
+/** TXDEN */
+#define CBUS_TXDEN 0
+/** PWREN# */
+#define CBUS_PWREN 1
+/** RXLED# */
+#define CBUS_RXLED 2
+/** TXLED#*/
+#define CBUS_TXLED 3
+/** RXLED# & TXLED# */
+#define CBUS_TXRXLED 4
+/** SLEEP# */
+#define CBUS_SLEEP 5
+/** 48 MHz clock */
+#define CBUS_CLK48 6
+/** 24 MHz clock */
+#define CBUS_CLK24 7
+/** 12 MHz clock */
+#define CBUS_CLK12 8
+/** 6 MHz clock */ 
+#define CBUS_CLK6 9
+/** Bitbang IO Mode*/
+#define CBUS_IOMODE 10
+/** Bitbang IO WR#*/
+#define CBUS_BB_WR 11
+/** Bitbang IO RD#*/
+#define CBUS_BB_RD 12
+
+
+/** Invert TXD# */
+#define INVERT_TXD 0x01
+/** Invert RXD# */ 
+#define INVERT_RXD 0x02
+/** Invert RTS# */
+#define INVERT_RTS 0x04
+/** Invert CTS# */
+#define INVERT_CTS 0x08
+/** Invert DTR# */
+#define INVERT_DTR 0x10
+/** Invert DSR# */
+#define INVERT_DSR 0x20
+/** Invert DCD# */
+#define INVERT_DCD 0x40
+/** Invert RI# */
+#define INVERT_RI  0x80
+
+/** High current drive. */
+#define HIGH_CURRENT_DRIVE 0x04
+
 /**
     \brief FTDI eeprom structure
 */
@@ -244,7 +293,7 @@ struct ftdi_eeprom
     /** remote wakeup */
     int remote_wakeup;
     /** chip type */
-    int BM_type_chip;
+    int chip_type;
 
     /** input in isochronous transfer mode */
     int in_is_isochronous;
@@ -268,6 +317,14 @@ struct ftdi_eeprom
     char *product;
     /** serial number */
     char *serial;
+
+    /* Special function of FT232R devices (and possibly others as well) */
+    /** CBUS pin function. See CBUS_xxx defines. */
+    int cbus_function[5];
+    /** Select hight current drive. */
+    int high_current;
+    /** Select inversion of data lines (bitmask). */
+    int invert;
 
     /** eeprom size in bytes. This doesn't get stored in the eeprom
         but is the only way to pass it to ftdi_eeprom_build. */
