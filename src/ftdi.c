@@ -1655,6 +1655,7 @@ int ftdi_read_data(struct ftdi_context *ftdi, unsigned char *buf, int size)
                 /* printf("Returning part: %d - size: %d - offset: %d - ret: %d - remaining: %d\n",
                 part_size, size, offset, ret, ftdi->readbuffer_remaining); */
 
+                return offset;
             }
         }
         gettimeofday(&tv_current,NULL);
