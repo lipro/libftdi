@@ -1331,7 +1331,7 @@ static int _usb_get_async_urbs_pending(struct ftdi_context *ftdi)
 static void _usb_async_cleanup(struct ftdi_context *ftdi, int wait_for_more, int timeout_msec)
 {
     struct timeval tv;
-    struct usbdevfs_urb *urb=NULL;
+    struct usbdevfs_urb *urb;
     int ret;
     fd_set writefds;
     int keep_going=0;
@@ -1345,6 +1345,9 @@ static void _usb_async_cleanup(struct ftdi_context *ftdi, int wait_for_more, int
 
     do
     {
+        ret = -1;
+        urb = NULL;
+
         while (_usb_get_async_urbs_pending(ftdi)
                 && (ret = ioctl(ftdi->usb_dev->fd, USBDEVFS_REAPURBNDELAY, &urb)) == -1
                 && errno == EAGAIN)
@@ -1366,7 +1369,6 @@ static void _usb_async_cleanup(struct ftdi_context *ftdi, int wait_for_more, int
             urb->usercontext = FTDI_URB_USERCONTEXT_COOKIE;
 
             /* try to get more urbs that are ready now, but don't wait anymore */
-            urb=NULL;
             keep_going=1;
         }
         else
