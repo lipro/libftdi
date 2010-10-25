@@ -1407,6 +1407,7 @@ static int _usb_bulk_write_async(struct ftdi_context *ftdi, int ep, char *bytes,
     do
     {
         /* find a free urb buffer we can use */
+        i = 0;
         urb=NULL;
         for (cleanup_count=0; urb==NULL && cleanup_count <= 1; cleanup_count++)
         {
