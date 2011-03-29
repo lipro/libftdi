@@ -1547,6 +1547,7 @@ int ftdi_write_data_get_chunksize(struct ftdi_context *ftdi, unsigned int *chunk
 /**
     Reads data in chunks (see ftdi_read_data_set_chunksize()) from the chip.
 
+    Returns when at least one byte is available or when the latency timer has elapsed
     Automatically strips the two modem status bytes transfered during every read.
 
     \param ftdi pointer to ftdi_context
