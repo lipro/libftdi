@@ -50,39 +50,6 @@
    } while(0);
 
 
-#if defined( __WIN32__) && !defined(__MINGW32__)
-#include <windows.h>
-#define DELTA_EPOCH_IN_MICROSECS  11644473600000000Ui64
-struct timeval {
-        long    tv_sec;
-        long    tv_usec;
-};
-int gettimeofday(  struct timeval *tv, void null)
-{
-    FILETIME ft;
-    unsigned __int64 tmpres = 0;
-    if(tv)
-    {
-        GetSystemTimeAsFileTime(&ft);
-        tmpres |= ft.dwHighDateTime;
-        tmpres <<= 32;
-        tmpres |= ft.dwLowDateTime;
-
-        /*converting file time to unix epoch*/
-        tmpres /= 10;  /*convert into microseconds*/
-        tmpres -= DELTA_EPOCH_IN_MICROSECS; 
-        tv->tv_sec = (LONG)(tmpres / 1000000UL);
-        tv->tv_usec = (LONG)(tmpres % 1000000UL);
-    }
-    /* Warning: Timezone not handled (and not needed here) */
-    return 0;
-}
-#else
-    // Include sys/time.h on non-Windows platforms
-    // as gettimeofday() needs it.
-    #include <sys/time.h>
-#endif
-
 /**
     Internal function to close usb device pointer.
     Sets ftdi->usb_dev to NULL.
@@ -1564,7 +1531,6 @@ int ftdi_read_data(struct ftdi_context *ftdi, unsigned char *buf, int size)
 {
     int offset = 0, ret = 1, i, num_of_chunks, chunk_remains;
     int packet_size;
-    struct timeval tv_start, tv_current;
 
     if (ftdi == NULL || ftdi->usb_dev == NULL)
         ftdi_error_return(-666, "USB device unavailable");
@@ -1596,7 +1562,6 @@ int ftdi_read_data(struct ftdi_context *ftdi, unsigned char *buf, int size)
         offset += ftdi->readbuffer_remaining;
     }
     // do the actual USB read
-    gettimeofday(&tv_start,NULL);
     while (offset < size && ret > 0)
     {
         ftdi->readbuffer_remaining = 0;
@@ -1633,6 +1598,14 @@ int ftdi_read_data(struct ftdi_context *ftdi, unsigned char *buf, int size)
                 else
                     ret -= 2*(num_of_chunks-1)+chunk_remains;
             }
+        }
+        else if (ret <= 2)
+        {
+            // no more data to read?
+            return offset;
+        }
+        if (ret > 0)
+        {
             // data still fits in buf?
             if (offset+ret <= size)
             {
@@ -1662,10 +1635,6 @@ int ftdi_read_data(struct ftdi_context *ftdi, unsigned char *buf, int size)
                 return offset;
             }
         }
-        gettimeofday(&tv_current,NULL);
-        if(((tv_current.tv_sec - tv_start.tv_sec)*1000000+(tv_current.tv_usec - tv_start.tv_usec)) 
-           > ftdi->usb_read_timeout)
-            return offset;
     }
     // never reached
     return -127;
