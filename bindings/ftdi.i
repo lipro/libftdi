@@ -3,6 +3,8 @@
 %include "typemaps.i"
 %include "cpointer.i"
 %pointer_functions(unsigned int, uintp);
+%pointer_functions(unsigned char *, ucharp);
+%pointer_functions(char *, charp);
 
 %typemap(in) unsigned char* = char*;
 %ignore ftdi_write_data_async;
