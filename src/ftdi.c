@@ -1901,7 +1901,7 @@ int ftdi_poll_modem_status(struct ftdi_context *ftdi, unsigned short *status)
     if (usb_control_msg(ftdi->usb_dev, FTDI_DEVICE_IN_REQTYPE, SIO_POLL_MODEM_STATUS_REQUEST, 0, ftdi->index, usb_val, 2, ftdi->usb_read_timeout) != 2)
         ftdi_error_return(-1, "getting modem status failed");
 
-    *status = (usb_val[1] << 8) | usb_val[0];
+    *status = (usb_val[1] << 8) | (usb_val[0] & 0xFF);
 
     return 0;
 }
