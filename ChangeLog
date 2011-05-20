@@ -1,3 +1,13 @@
+New in 0.19 - 2011-05-XX
+------------------------
+* Correct ftdi_poll_modem_status() result code (Tom Saunders)
+* cmake build system improvements (Evgeny Sinelnikov)
+* Fix uninitialized memory access in async mode (Intra2net)
+* Support for FT232R eeprom features (Hermann Kraus)
+* Fix size returned by ftdi_read_data (Hermann Kraus)
+* C++ wrapper: Fix infinite recursion in set_bitmode (Intra2net)
+* Improvements to the python wrapper (Flynn Marquardt and Chris Zeh)
+
 New in 0.18 - 2010-06-25
 ------------------------
 * Add ftdi_eeprom_free() to free allocated memory in eeprom (Wilfried Holzke)
