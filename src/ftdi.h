@@ -56,6 +56,13 @@ enum ftdi_interface
     INTERFACE_D   = 4
 };
 
+/** Automatic loading / unloading of kernel modules */
+enum ftdi_module_detach_mode
+{
+    AUTO_DETACH_SIO_MODULE = 0,
+    DONT_DETACH_SIO_MODULE = 1
+};
+
 /* Shifting commands IN MPSSE Mode*/
 #define MPSSE_WRITE_NEG 0x01   /* Write TDI/DO on negative TCK/SK edge*/
 #define MPSSE_BITMODE   0x02   /* Write bits, not bytes */
@@ -216,6 +223,9 @@ struct ftdi_context
     char *async_usb_buffer;
     /** Number of URB-structures we can buffer */
     unsigned int async_usb_buffer_size;
+
+    /** Defines behavior in case a kernel module is already attached to the device */
+    enum ftdi_module_detach_mode module_detach_mode;
 };
 
 /**

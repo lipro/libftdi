@@ -123,6 +123,8 @@ int ftdi_init(struct ftdi_context *ftdi)
 
     ftdi->eeprom_size = FTDI_DEFAULT_EEPROM_SIZE;
 
+    ftdi->module_detach_mode = AUTO_DETACH_SIO_MODULE;
+
     /* All fine. Now allocate the readbuffer */
     return ftdi_read_data_set_chunksize(ftdi, 4096);
 }
@@ -471,8 +473,11 @@ int ftdi_usb_open_dev(struct ftdi_context *ftdi, struct usb_device *dev)
     // if usb_set_configuration() or usb_claim_interface() fails as the
     // detach operation might be denied and everything still works fine.
     // Likely scenario is a static ftdi_sio kernel module.
-    if (usb_detach_kernel_driver_np(ftdi->usb_dev, ftdi->interface) != 0 && errno != ENODATA)
-        detach_errno = errno;
+    if (ftdi->module_detach_mode == AUTO_DETACH_SIO_MODULE)
+    {
+        if (usb_detach_kernel_driver_np(ftdi->usb_dev, ftdi->interface) != 0 && errno != ENODATA)
+            detach_errno = errno;
+    }
 #endif
 
 #ifdef __WIN32__
