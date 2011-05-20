@@ -1,5 +1,5 @@
 --------------------------------------------------------------------
-libftdi version 0.18
+libftdi version 0.19
 --------------------------------------------------------------------
 
 libftdi - A library (using libusb) to talk to FTDI's UART/FIFO chips
@@ -20,19 +20,17 @@ the initial C++ wrapper implementation.
 
 Changes
 -------
-* Add ftdi_eeprom_free() to free allocated memory in eeprom (Wilfried Holzke)
-* More generic error message for the FTDI kernel driver (Intra2net)
-* Honor CPPFLAGS in python wrapper build (Alexander Lehmann)
-* cmake: Fix package creation on 32-bit machines (Uwe Bonnes)
-* Fix swig argument constraints (Intra2net)
-* Don't segfault if device is closed or ftdi context is invalid (Intra2net)
-* Ability to disable build of examples / documentation (Mike Frysinger and Intra2net)
-* Fix typo in python wrapper build (Mike Frysinger)
-* Autoconf build system improvements (Mike Frysinger)
+* Correct ftdi_poll_modem_status() result code (Tom Saunders)
+* cmake build system improvements (Evgeny Sinelnikov)
+* Fix uninitialized memory access in async mode (Intra2net)
+* Support for FT232R eeprom features (Hermann Kraus)
+* Fix size returned by ftdi_read_data (Hermann Kraus)
+* C++ wrapper: Fix infinite recursion in set_bitmode (Intra2net)
+* Improvements to the python wrapper (Flynn Marquardt and Chris Zeh)
 
 You'll find the newest version of libftdi at:
 http://www.intra2net.com/en/developer/libftdi
 
 --------------------------------------------------------------------
-www.intra2net.com                             2003-2010 Intra2net AG
+www.intra2net.com                             2003-2011 Intra2net AG
 --------------------------------------------------------------------

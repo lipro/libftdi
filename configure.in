@@ -1,4 +1,4 @@
-AC_INIT(libftdi, 0.18)
+AC_INIT(libftdi, 0.19)
 AM_INIT_AUTOMAKE
 AM_CONFIG_HEADER(config.h)
 
