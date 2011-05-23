@@ -1,5 +1,6 @@
-New in 0.19 - 2011-05-XX
+New in 0.19 - 2011-05-23
 ------------------------
+* Make kernel driver detach configurable (Thomas Klose)
 * Correct ftdi_poll_modem_status() result code (Tom Saunders)
 * cmake build system improvements (Evgeny Sinelnikov)
 * Fix uninitialized memory access in async mode (Intra2net)
