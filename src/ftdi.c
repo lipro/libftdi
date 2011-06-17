@@ -414,7 +414,7 @@ static unsigned int _ftdi_determine_max_packet_size(struct ftdi_context *ftdi, s
     // Determine maximum packet size. Init with default value.
     // New hi-speed devices from FTDI use a packet size of 512 bytes
     // but could be connected to a normal speed USB hub -> 64 bytes packet size.
-    if (ftdi->type == TYPE_2232H || ftdi->type == TYPE_4232H)
+    if (ftdi->type == TYPE_2232H || ftdi->type == TYPE_4232H || ftdi->type == TYPE_232H)
         packet_size = 512;
     else
         packet_size = 64;
@@ -541,6 +541,8 @@ int ftdi_usb_open_dev(struct ftdi_context *ftdi, struct usb_device *dev)
         ftdi->type = TYPE_2232H;
     else if (dev->descriptor.bcdDevice == 0x800)
         ftdi->type = TYPE_4232H;
+    else if (dev->descriptor.bcdDevice == 0x900)
+        ftdi->type = TYPE_232H;
 
     // Set default interface on dual/quad type chips
     switch(ftdi->type)
@@ -1072,7 +1074,8 @@ static int ftdi_convert_baudrate(int baudrate, struct ftdi_context *ftdi,
     }
     // Split into "value" and "index" values
     *value = (unsigned short)(encoded_divisor & 0xFFFF);
-    if (ftdi->type == TYPE_2232C || ftdi->type == TYPE_2232H || ftdi->type == TYPE_4232H)
+    if (ftdi->type == TYPE_2232C || ftdi->type == TYPE_2232H || ftdi->type == TYPE_4232H
+        || ftdi->type == TYPE_232H)
     {
         *index = (unsigned short)(encoded_divisor >> 8);
         *index &= 0xFF00;
@@ -2264,6 +2267,15 @@ int ftdi_eeprom_build(struct ftdi_eeprom *eeprom, unsigned char *output)
         case TYPE_R:
             output[0x07] = 0x06;
             break;
+        case TYPE_2232H:
+            output[0x07] = 0x07;
+            break;
+         case TYPE_4232H:
+            output[0x07] = 0x08;
+            break;
+        case TYPE_232H:
+            output[0x07] = 0x09;
+            break;
         default:
             output[0x07] = 0x00;
     }
@@ -2453,6 +2465,15 @@ int ftdi_eeprom_decode(struct ftdi_eeprom *eeprom, unsigned char *buf, int size)
     value = buf[0x06] + (buf[0x07]<<8);
     switch (value)
     {
+        case 0x0900:
+            eeprom->chip_type = TYPE_232H;
+            break;
+        case 0x0800:
+            eeprom->chip_type = TYPE_4232H;
+            break;
+        case 0x0700:
+            eeprom->chip_type = TYPE_2232H;
+            break;
         case 0x0600:
             eeprom->chip_type = TYPE_R;
             break;

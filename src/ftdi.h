@@ -22,7 +22,7 @@
 #define FTDI_DEFAULT_EEPROM_SIZE 128
 
 /** FTDI chip type */
-enum ftdi_chip_type { TYPE_AM=0, TYPE_BM=1, TYPE_2232C=2, TYPE_R=3, TYPE_2232H=4, TYPE_4232H=5 };
+enum ftdi_chip_type { TYPE_AM=0, TYPE_BM=1, TYPE_2232C=2, TYPE_R=3, TYPE_2232H=4, TYPE_4232H=5, TYPE_232H = 6 };
 /** Parity mode for ftdi_set_line_property() */
 enum ftdi_parity_type { NONE=0, ODD=1, EVEN=2, MARK=3, SPACE=4 };
 /** Number of stop bits for ftdi_set_line_property() */
