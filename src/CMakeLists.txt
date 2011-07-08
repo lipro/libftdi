@@ -37,7 +37,7 @@ if(${UNIX})
             )
 
    install( FILES ${c_headers}
-            DESTINATION include/${PROJECT_NAME}
+            DESTINATION include
             COMPONENT headers
             )
 
@@ -56,7 +56,7 @@ if(${WIN32})
             )
 
    install( FILES ${c_headers}
-            DESTINATION include/${PROJECT_NAME}
+            DESTINATION include
             COMPONENT headers
             )
 

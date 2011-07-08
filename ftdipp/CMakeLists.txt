@@ -52,7 +52,7 @@ if (FTDIPP)
                 )
 
     install( FILES ${cpp_headers}
-                DESTINATION include/${PROJECT_NAME}
+                DESTINATION include
                 COMPONENT headers
                 )
 
@@ -71,7 +71,7 @@ if (FTDIPP)
                 )
 
     install( FILES ${cpp_headers}
-                DESTINATION include/${PROJECT_NAME}
+                DESTINATION include
                 COMPONENT headers
                 )
 
