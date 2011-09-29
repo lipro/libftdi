@@ -9,7 +9,7 @@ if (EXAMPLES)
     message(STATUS "Building example programs.")
 
     # Source includes
-    include_directories(${CMAKE_SOURCE_DIR}/src)
+    include_directories(BEFORE ${CMAKE_SOURCE_DIR}/src)
 
     # Targets
     add_executable(simple simple.c)
