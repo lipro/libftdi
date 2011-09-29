@@ -49,7 +49,7 @@ rm -f $RPM_BUILD_ROOT/usr/bin/bitbang_ft2232
 rm -f $RPM_BUILD_ROOT/usr/bin/bitbang_cbus
 rm -f $RPM_BUILD_ROOT/usr/bin/find_all
 rm -f $RPM_BUILD_ROOT/usr/bin/find_all_pp
-rm -f $RPM_BUILD_ROOT/usr/bin/serial_read
+rm -f $RPM_BUILD_ROOT/usr/bin/serial_test
 rm -f $RPM_BUILD_ROOT/usr/bin/baud_test
 
 %clean

@@ -43,7 +43,7 @@ examples/bitbang_cbus
 examples/bitbang_ft2232
 examples/find_all
 examples/find_all_pp
-examples/serial_read
+examples/serial_test
 examples/simple
 
 # python bindings

@@ -17,7 +17,7 @@ all_examples = simple \
 	bitbang_ft2232 \
 	bitbang_cbus \
 	find_all \
-	serial_read \
+	serial_test \
 	baud_test \
 	$(examples_libftdipp)
 else
@@ -34,7 +34,7 @@ bitbang2_SOURCES = bitbang2.c
 bitbang_ft2232_SOURCES = bitbang_ft2232.c
 bitbang_cbus_SOURCES = bitbang_cbus.c
 find_all_SOURCES = find_all.c
-serial_read_SOURCES = serial_read.c
+serial_test_SOURCES = serial_test.c
 baud_test_SOURCES = baud_test.c
 
 if HAVE_LIBFTDIPP

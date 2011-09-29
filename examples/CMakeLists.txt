@@ -18,7 +18,7 @@ if (EXAMPLES)
     add_executable(bitbang_cbus bitbang_cbus.c)
     add_executable(bitbang_ft2232 bitbang_ft2232.c)
     add_executable(find_all find_all.c)
-    add_executable(serial_read serial_read.c)
+    add_executable(serial_test serial_test.c)
     add_executable(baud_test baud_test.c)
 
     # Linkage
@@ -28,7 +28,7 @@ if (EXAMPLES)
     target_link_libraries(bitbang_cbus ftdi)
     target_link_libraries(bitbang_ft2232 ftdi)
     target_link_libraries(find_all ftdi)
-    target_link_libraries(serial_read ftdi)
+    target_link_libraries(serial_test ftdi)
     target_link_libraries(baud_test ftdi)
 
     # libftdi++ examples
