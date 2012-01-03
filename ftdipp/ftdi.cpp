@@ -85,6 +85,8 @@ int Context::open(int vendor, int product)
     if (ret < 0)
        return ret;
 
+    d->dev = usb_device(d->ftdi->usb_dev);
+
     return get_strings_and_reopen();
 }
 
@@ -104,6 +106,8 @@ int Context::open(int vendor, int product, const std::string& description, const
     if (ret < 0)
        return ret;
 
+    d->dev = usb_device(d->ftdi->usb_dev);
+
     return get_strings_and_reopen();
 }
 
@@ -113,6 +117,8 @@ int Context::open(const std::string& description)
 
     if (ret < 0)
        return ret;
+
+    d->dev = usb_device(d->ftdi->usb_dev);
 
     return get_strings_and_reopen();
 }
