@@ -1,5 +1,5 @@
 --------------------------------------------------------------------
-libftdi version 0.19
+libftdi version 0.20
 --------------------------------------------------------------------
 
 libftdi - A library (using libusb) to talk to FTDI's UART/FIFO chips
@@ -7,7 +7,7 @@ including the popular bitbang mode.
 
 The following chips are supported:
 - FT4232H / FT2232H
-- FT232R  / FT245R
+- FT232R  / FT245R / FT232H
 - FT2232L / FT2232D / FT2232C
 - FT232BM / FT245BM (and the BL/BQ variants)
 - FT8U232AM / FT8U245AM
@@ -20,17 +20,13 @@ the initial C++ wrapper implementation.
 
 Changes
 -------
-* Correct ftdi_poll_modem_status() result code (Tom Saunders)
-* cmake build system improvements (Evgeny Sinelnikov)
-* Fix uninitialized memory access in async mode (Intra2net)
-* Support for FT232R eeprom features (Hermann Kraus)
-* Fix size returned by ftdi_read_data (Hermann Kraus)
-* C++ wrapper: Fix infinite recursion in set_bitmode (Intra2net)
-* Improvements to the python wrapper (Flynn Marquardt and Chris Zeh)
+* Support for FT232H (Uwe Bonnes)
+* Fixed install location of header files (Uwe Bonnes and Intra2net)
+* Backported serial_test tool from libftdi 1.x (Uwe Bonnes)
 
 You'll find the newest version of libftdi at:
 http://www.intra2net.com/en/developer/libftdi
 
 --------------------------------------------------------------------
-www.intra2net.com                             2003-2011 Intra2net AG
+www.intra2net.com                             2003-2012 Intra2net AG
 --------------------------------------------------------------------

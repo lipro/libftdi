@@ -1,3 +1,9 @@
+New in 0.20 - 2012-03-19
+------------------------
+* Support for FT232H (Uwe Bonnes)
+* Fixed install location of header files (Uwe Bonnes and Intra2net)
+* Backported serial_test tool from libftdi 1.x (Uwe Bonnes)
+
 New in 0.19 - 2011-05-23
 ------------------------
 * Make kernel driver detach configurable (Thomas Klose)
