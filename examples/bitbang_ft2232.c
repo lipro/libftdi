@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #ifdef __WIN32__
-#define sleep(x) _sleep(x)
+#define sleep(x) Sleep(x)
 #endif
 #include <ftdi.h>
 
