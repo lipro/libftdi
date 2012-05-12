@@ -8,9 +8,6 @@ if (EXAMPLES)
 
     message(STATUS "Building example programs.")
 
-    # Source includes
-    include_directories(BEFORE ${CMAKE_SOURCE_DIR}/src)
-
     # Targets
     add_executable(simple simple.c)
     add_executable(bitbang bitbang.c)
@@ -42,6 +39,10 @@ if (EXAMPLES)
         # Linkage
         target_link_libraries(find_all_pp ftdipp)
     endif(FTDI_BUILD_CPP)
+
+    # Source includes
+    include_directories(BEFORE ${CMAKE_SOURCE_DIR}/src)
+
 else(EXAMPLES)
     message(STATUS "Not building example programs.")
 endif(EXAMPLES)
