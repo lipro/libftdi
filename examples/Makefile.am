@@ -39,6 +39,7 @@ baud_test_SOURCES = baud_test.c
 
 if HAVE_LIBFTDIPP
 find_all_pp_SOURCES = find_all_pp.cpp
+find_all_pp_CPPFLAGS = $(BOOST_CPPFLAGS)
 find_all_pp_LDADD = $(top_builddir)/ftdipp/libftdipp.la $(LDADD)
 endif
 
