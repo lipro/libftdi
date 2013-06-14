@@ -132,6 +132,8 @@ if(DOCUMENTATION AND DOXYGEN_FOUND)
 
    message(STATUS "Generating API documentation with Doxygen")
 else(DOCUMENTATION AND DOXYGEN_FOUND)
+   # Set variables for pkg-config (QnD: hack hack hack !!!)
+   set(VERSION ${VERSION_STRING})
    message(STATUS "Not generating API documentation")
 endif(DOCUMENTATION AND DOXYGEN_FOUND)
 
@@ -144,13 +146,25 @@ if(${UNIX})
    set(libdir      ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
 endif(${UNIX})
 if(${WIN32})
-   set(libdir      ${CMAKE_INSTALL_PREFIX}/bin)
+   set(libdir      ${CMAKE_INSTALL_PREFIX}/lib)
 endif(${WIN32})
 
 configure_file(${CMAKE_SOURCE_DIR}/libftdi.pc.in ${CMAKE_BINARY_DIR}/libftdi.pc @ONLY)
 configure_file(${CMAKE_SOURCE_DIR}/libftdipp.pc.in ${CMAKE_BINARY_DIR}/libftdipp.pc @ONLY)
-install(FILES ${CMAKE_BINARY_DIR}/libftdi.pc ${CMAKE_BINARY_DIR}/libftdipp.pc
-        DESTINATION lib${LIB_SUFFIX}/pkgconfig)
+
+if(${UNIX})
+    install(FILES ${CMAKE_BINARY_DIR}/libftdi.pc DESTINATION lib${LIB_SUFFIX}/pkgconfig)
+    if (FTDIPP)
+      install(FILES ${CMAKE_BINARY_DIR}/libftdipp.pc DESTINATION lib${LIB_SUFFIX}/pkgconfig)
+    endif(FTDIPP)
+endif(${UNIX})
+
+if(${WIN32})
+    install(FILES ${CMAKE_BINARY_DIR}/libftdi.pc DESTINATION lib/pkgconfig)
+    if (FTDIPP)
+      install(FILES ${CMAKE_BINARY_DIR}/libftdipp.pc DESTINATION lib/pkgconfig)
+    endif(FTDIPP)
+endif(${WIN32})
 
 if(${UNIX})
     configure_file(${CMAKE_SOURCE_DIR}/libftdi-config.in ${CMAKE_BINARY_DIR}/libftdi-config @ONLY)

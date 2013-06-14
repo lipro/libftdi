@@ -61,12 +61,17 @@ if (FTDIPP)
     if(${WIN32})
 
     install( TARGETS ftdipp
-                DESTINATION bin
+                RUNTIME DESTINATION bin
+                COMPONENT sharedlibs
+                )
+
+    install( TARGETS ftdipp
+                ARCHIVE DESTINATION lib
                 COMPONENT sharedlibs
                 )
 
     install( TARGETS ftdipp-static
-                DESTINATION bin
+                DESTINATION lib
                 COMPONENT staticlibs
                 )
 

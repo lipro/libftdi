@@ -46,12 +46,17 @@ endif(${UNIX})
 if(${WIN32})
 
    install( TARGETS ftdi
-            DESTINATION bin
+            RUNTIME DESTINATION bin
+            COMPONENT sharedlibs
+            )
+
+   install( TARGETS ftdi
+            ARCHIVE DESTINATION lib
             COMPONENT sharedlibs
             )
 
    install( TARGETS ftdi-static
-            DESTINATION bin
+            DESTINATION lib
             COMPONENT staticlibs
             )
 
