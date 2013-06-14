@@ -31,6 +31,16 @@ if (EXAMPLES)
     target_link_libraries(serial_test ftdi)
     target_link_libraries(baud_test ftdi)
 
+    # Install
+    install(TARGETS simple RUNTIME DESTINATION bin)
+    install(TARGETS bitbang RUNTIME DESTINATION bin)
+    install(TARGETS bitbang2 RUNTIME DESTINATION bin)
+    install(TARGETS bitbang_cbus RUNTIME DESTINATION bin)
+    install(TARGETS bitbang_ft2232 RUNTIME DESTINATION bin)
+    install(TARGETS find_all RUNTIME DESTINATION bin)
+    install(TARGETS serial_test RUNTIME DESTINATION bin)
+    install(TARGETS baud_test RUNTIME DESTINATION bin)
+
     # libftdi++ examples
     if(FTDI_BUILD_CPP)
         message(STATUS "Building libftdi++ examples.")
@@ -41,6 +51,9 @@ if (EXAMPLES)
 
         # Linkage
         target_link_libraries(find_all_pp ftdipp)
+
+        # Install
+        install(TARGETS find_all_pp RUNTIME DESTINATION bin)
     endif(FTDI_BUILD_CPP)
 else(EXAMPLES)
     message(STATUS "Not building example programs.")
