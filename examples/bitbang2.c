@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #ifdef __WIN32__
+#include <windows.h>
 #define usleep(x) Sleep((x+999)/1000)
 #endif
 #include <ftdi.h>

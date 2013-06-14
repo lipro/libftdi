@@ -10,6 +10,10 @@
 #include <unistd.h>
 #include <getopt.h>
 #include <signal.h>
+#ifdef __WIN32__
+#include <windows.h>
+#define sleep(x) Sleep((x)*1000)
+#endif
 #include <ftdi.h>
 
 static int exitRequested = 0;

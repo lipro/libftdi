@@ -3,7 +3,8 @@
 #include <stdio.h>
 #include <unistd.h>
 #ifdef __WIN32__
-#define sleep(x) Sleep(x)
+#include <windows.h>
+#define sleep(x) Sleep((x)*1000)
 #endif
 #include <ftdi.h>
 
