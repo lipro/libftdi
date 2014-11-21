@@ -6,6 +6,7 @@ libftdi - A library (using libusb) to talk to FTDI's UART/FIFO chips
 including the popular bitbang mode.
 
 The following chips are supported:
+* FT230X
 - FT4232H / FT2232H
 - FT232R  / FT245R
 - FT2232L / FT2232D / FT2232C
