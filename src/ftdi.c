@@ -2392,10 +2392,10 @@ int ftdi_eeprom_initdefaults(struct ftdi_context *ftdi, char * manufacturer,
     {
         eeprom->max_power = 90;
         eeprom->size = 0x100;
-        eeprom->cbus_function[0] = CBUSH_TXDEN;
-        eeprom->cbus_function[1] = CBUSH_RXLED;
-        eeprom->cbus_function[2] = CBUSH_TXLED;
-        eeprom->cbus_function[3] = CBUSH_SLEEP;
+        eeprom->cbus_function[0] = CBUSX_TXDEN;
+        eeprom->cbus_function[1] = CBUSX_RXLED;
+        eeprom->cbus_function[2] = CBUSX_TXLED;
+        eeprom->cbus_function[3] = CBUSX_SLEEP;
     }
     else
     {
@@ -2488,7 +2488,7 @@ int ftdi_eeprom_set_strings(struct ftdi_context *ftdi, char * manufacturer,
 }
 
 
-/*FTD2XX doesn't check for values not fitting in the ACBUS Signal oprtions*/
+/*FTD2XX doesn't check for values not fitting in the ACBUS Signal options*/
 void set_ft232h_cbus(struct ftdi_eeprom *eeprom, unsigned char * output)
 {
     int i;
@@ -2843,22 +2843,22 @@ int ftdi_eeprom_build(struct ftdi_context *ftdi)
             output[0x0C] = eeprom->usb_version & 0xff;
             output[0x0D] = (eeprom->usb_version>>8) & 0xff;
 
-            if (eeprom->cbus_function[0] > CBUS_BB)
+            if (eeprom->cbus_function[0] > CBUS_BB_RD)
                 output[0x14] = CBUS_TXLED;
             else
                 output[0x14] = eeprom->cbus_function[0];
 
-            if (eeprom->cbus_function[1] > CBUS_BB)
+            if (eeprom->cbus_function[1] > CBUS_BB_RD)
                 output[0x14] |= CBUS_RXLED<<4;
             else
                 output[0x14] |= eeprom->cbus_function[1]<<4;
 
-            if (eeprom->cbus_function[2] > CBUS_BB)
+            if (eeprom->cbus_function[2] > CBUS_BB_RD)
                 output[0x15] = CBUS_TXDEN;
             else
                 output[0x15] = eeprom->cbus_function[2];
 
-            if (eeprom->cbus_function[3] > CBUS_BB)
+            if (eeprom->cbus_function[3] > CBUS_BB_RD)
                 output[0x15] |= CBUS_PWREN<<4;
             else
                 output[0x15] |= eeprom->cbus_function[3]<<4;
@@ -3493,7 +3493,7 @@ int ftdi_eeprom_decode(struct ftdi_context *ftdi, int verbose)
         }
         else if (ftdi->type == TYPE_232H)
         {
-            char *cbush_mux[] = {"TRISTATE","RXLED","TXLED", "TXRXLED","PWREN",
+            char *cbush_mux[] = {"TRISTATE","TXLED","RXLED", "TXRXLED","PWREN",
                                  "SLEEP","DRIVE_0","DRIVE_1","IOMODE","TXDEN",
                                  "CLK30","CLK15","CLK7_5"
                                 };
@@ -3514,7 +3514,7 @@ int ftdi_eeprom_decode(struct ftdi_context *ftdi, int verbose)
         }
         else if (ftdi->type == TYPE_230X)
         {
-            char *cbush_mux[] = {"TRISTATE","RXLED","TXLED", "TXRXLED","PWREN",
+            char *cbusx_mux[] = {"TRISTATE","TXLED","RXLED", "TXRXLED","PWREN",
                                  "SLEEP","DRIVE_0","DRIVE_1","IOMODE","TXDEN",
                                  "CLK24","CLK12","CLK6","BAT_DETECT","BAT_DETECT#",
                                  "I2C_TXE#", "I2C_RXF#", "VBUS_SENSE", "BB_WR#",
@@ -3530,8 +3530,8 @@ int ftdi_eeprom_decode(struct ftdi_context *ftdi, int verbose)
                     (eeprom->group1_slew)?" Slow Slew":"");
             for (i=0; i<4; i++)
             {
-                if (eeprom->cbus_function[i]<= CBUSH_AWAKE)
-                    fprintf(stdout,"CBUS%d Function: %s\n", i, cbush_mux[eeprom->cbus_function[i]]);
+                if (eeprom->cbus_function[i]<= CBUSX_AWAKE)
+                    fprintf(stdout,"CBUS%d Function: %s\n", i, cbusx_mux[eeprom->cbus_function[i]]);
             }
 
             if (eeprom->invert)
@@ -3551,7 +3551,7 @@ int ftdi_eeprom_decode(struct ftdi_context *ftdi, int verbose)
 
             for (i=0; i<5; i++)
             {
-                if (eeprom->cbus_function[i]<CBUS_BB)
+                if (eeprom->cbus_function[i]<=CBUS_BB_RD)
                     fprintf(stdout,"C%d Function: %s\n", i,
                             cbus_mux[eeprom->cbus_function[i]]);
                 else

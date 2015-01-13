@@ -41,27 +41,72 @@
 #include <ftdi.h>
 #include <ftdi_eeprom_version.h>
 
-static int str_to_cbus(char *str, int max_allowed)
+static int parse_cbus(cfg_t *cfg, cfg_opt_t *opt, const char *value, void *result)
 {
-#define MAX_OPTION 14
-    const char* options[MAX_OPTION] =
+    static const char* options[] =
     {
-        "TXDEN", "PWREN", "RXLED", "TXLED", "TXRXLED", "SLEEP",
-        "CLK48", "CLK24", "CLK12", "CLK6",
-        "IO_MODE", "BITBANG_WR", "BITBANG_RD", "SPECIAL"
+        "TXDEN", "PWREN", "RXLED", "TXLED", "TXRXLED", "SLEEP", "CLK48",
+        "CLK24", "CLK12", "CLK6", "IOMODE", "BB_WR", "BB_RD"
     };
+
     int i;
-    max_allowed += 1;
-    if (max_allowed > MAX_OPTION) max_allowed = MAX_OPTION;
-    for (i=0; i<max_allowed; i++)
+    for (i=0; i<sizeof(options)/sizeof(*options); i++)
     {
-        if (!(strcmp(options[i], str)))
+        if (!(strcmp(options[i], value)))
         {
-            return i;
+            *(int *)result = i;
+            return 0;
         }
     }
-    printf("WARNING: Invalid cbus option '%s'\n", str);
-    return 0;
+
+    cfg_error(cfg, "Invalid %s option '%s'", cfg_opt_name(opt), value);
+    return -1;
+}
+
+static int parse_cbush(cfg_t *cfg, cfg_opt_t *opt, const char *value, void *result)
+{
+    static const char* options[] =
+    {
+        "TRISTATE", "TXLED", "RXLED", "TXRXLED", "PWREN", "SLEEP",
+        "DRIVE_0", "DRIVE1", "IOMODE", "TXDEN", "CLK30", "CLK15", "CLK7_5"
+    };
+
+    int i;
+    for (i=0; i<sizeof(options)/sizeof(*options); i++)
+    {
+        if (!(strcmp(options[i], value)))
+        {
+            *(int *)result = i;
+            return 0;
+        }
+    }
+
+    cfg_error(cfg, "Invalid %s option '%s'", cfg_opt_name(opt), value);
+    return -1;
+}
+
+static int parse_cbusx(cfg_t *cfg, cfg_opt_t *opt, const char *value, void *result)
+{
+    static const char* options[] =
+    {
+        "TRISTATE", "TXLED", "RXLED", "TXRXLED", "PWREN", "SLEEP",
+        "DRIVE_0", "DRIVE1", "IOMODE", "TXDEN", "CLK24", "CLK12",
+        "CLK6", "BAT_DETECT", "BAT_DETECT_NEG", "I2C_TXE", "I2C_RXF", "VBUS_SENSE",
+        "BB_WR", "BB_RD", "TIME_STAMP", "AWAKE"
+    };
+
+    int i;
+    for (i=0; i<sizeof(options)/sizeof(*options); i++)
+    {
+        if (!(strcmp(options[i], value)))
+        {
+            *(int *)result = i;
+            return 0;
+        }
+    }
+
+    cfg_error(cfg, "Invalid %s option '%s'", cfg_opt_name(opt), value);
+    return -1;
 }
 
 /**
@@ -126,11 +171,25 @@ int main(int argc, char *argv[])
         CFG_STR("filename", "", 0),
         CFG_BOOL("flash_raw", cfg_false, 0),
         CFG_BOOL("high_current", cfg_false, 0),
-        CFG_STR_LIST("cbus0", "{TXDEN,PWREN,RXLED,TXLED,TXRXLED,SLEEP,CLK48,CLK24,CLK12,CLK6,IO_MODE,BITBANG_WR,BITBANG_RD,SPECIAL}", 0),
-        CFG_STR_LIST("cbus1", "{TXDEN,PWREN,RXLED,TXLED,TXRXLED,SLEEP,CLK48,CLK24,CLK12,CLK6,IO_MODE,BITBANG_WR,BITBANG_RD,SPECIAL}", 0),
-        CFG_STR_LIST("cbus2", "{TXDEN,PWREN,RXLED,TXLED,TXRXLED,SLEEP,CLK48,CLK24,CLK12,CLK6,IO_MODE,BITBANG_WR,BITBANG_RD,SPECIAL}", 0),
-        CFG_STR_LIST("cbus3", "{TXDEN,PWREN,RXLED,TXLED,TXRXLED,SLEEP,CLK48,CLK24,CLK12,CLK6,IO_MODE,BITBANG_WR,BITBANG_RD,SPECIAL}", 0),
-        CFG_STR_LIST("cbus4", "{TXDEN,PWRON,RXLED,TXLED,TX_RX_LED,SLEEP,CLK48,CLK24,CLK12,CLK6}", 0),
+        CFG_INT_CB("cbus0", -1, 0, parse_cbus),
+        CFG_INT_CB("cbus1", -1, 0, parse_cbus),
+        CFG_INT_CB("cbus2", -1, 0, parse_cbus),
+        CFG_INT_CB("cbus3", -1, 0, parse_cbus),
+        CFG_INT_CB("cbus4", -1, 0, parse_cbus),
+        CFG_INT_CB("cbush0", -1, 0, parse_cbush),
+        CFG_INT_CB("cbush1", -1, 0, parse_cbush),
+        CFG_INT_CB("cbush2", -1, 0, parse_cbush),
+        CFG_INT_CB("cbush3", -1, 0, parse_cbush),
+        CFG_INT_CB("cbush4", -1, 0, parse_cbush),
+        CFG_INT_CB("cbush5", -1, 0, parse_cbush),
+        CFG_INT_CB("cbush6", -1, 0, parse_cbush),
+        CFG_INT_CB("cbush7", -1, 0, parse_cbush),
+        CFG_INT_CB("cbush8", -1, 0, parse_cbush),
+        CFG_INT_CB("cbush9", -1, 0, parse_cbush),
+        CFG_INT_CB("cbusx0", -1, 0, parse_cbusx),
+        CFG_INT_CB("cbusx1", -1, 0, parse_cbusx),
+        CFG_INT_CB("cbusx2", -1, 0, parse_cbusx),
+        CFG_INT_CB("cbusx3", -1, 0, parse_cbusx),
         CFG_BOOL("invert_txd", cfg_false, 0),
         CFG_BOOL("invert_rxd", cfg_false, 0),
         CFG_BOOL("invert_rts", cfg_false, 0),
@@ -286,11 +345,55 @@ int main(int argc, char *argv[])
     eeprom_set_value(ftdi, CHIP_TYPE, cfg_getint(cfg, "eeprom_type"));
 
     eeprom_set_value(ftdi, HIGH_CURRENT, cfg_getbool(cfg, "high_current"));
-    eeprom_set_value(ftdi, CBUS_FUNCTION_0, str_to_cbus(cfg_getstr(cfg, "cbus0"), 13));
-    eeprom_set_value(ftdi, CBUS_FUNCTION_1, str_to_cbus(cfg_getstr(cfg, "cbus1"), 13));
-    eeprom_set_value(ftdi, CBUS_FUNCTION_2, str_to_cbus(cfg_getstr(cfg, "cbus2"), 13));
-    eeprom_set_value(ftdi, CBUS_FUNCTION_3, str_to_cbus(cfg_getstr(cfg, "cbus3"), 13));
-    eeprom_set_value(ftdi, CBUS_FUNCTION_4, str_to_cbus(cfg_getstr(cfg, "cbus4"), 9));
+
+    if (ftdi->type == TYPE_R)
+    {
+        if (cfg_getint(cfg, "cbus0") != -1)
+            eeprom_set_value(ftdi, CBUS_FUNCTION_0, cfg_getint(cfg, "cbus0"));
+        if (cfg_getint(cfg, "cbus1") != -1)
+            eeprom_set_value(ftdi, CBUS_FUNCTION_1, cfg_getint(cfg, "cbus1"));
+        if (cfg_getint(cfg, "cbus2") != -1)
+            eeprom_set_value(ftdi, CBUS_FUNCTION_2, cfg_getint(cfg, "cbus2"));
+        if (cfg_getint(cfg, "cbus3") != -1)
+            eeprom_set_value(ftdi, CBUS_FUNCTION_3, cfg_getint(cfg, "cbus3"));
+        if (cfg_getint(cfg, "cbus4") != -1)
+            eeprom_set_value(ftdi, CBUS_FUNCTION_4, cfg_getint(cfg, "cbus4"));
+    }
+    else if (ftdi->type == TYPE_232H)
+    {
+        if (cfg_getint(cfg, "cbush0") != -1)
+            eeprom_set_value(ftdi, CBUS_FUNCTION_0, cfg_getint(cfg, "cbush0"));
+        if (cfg_getint(cfg, "cbush1") != -1)
+            eeprom_set_value(ftdi, CBUS_FUNCTION_1, cfg_getint(cfg, "cbush1"));
+        if (cfg_getint(cfg, "cbush2") != -1)
+            eeprom_set_value(ftdi, CBUS_FUNCTION_2, cfg_getint(cfg, "cbush2"));
+        if (cfg_getint(cfg, "cbush3") != -1)
+            eeprom_set_value(ftdi, CBUS_FUNCTION_3, cfg_getint(cfg, "cbush3"));
+        if (cfg_getint(cfg, "cbush4") != -1)
+            eeprom_set_value(ftdi, CBUS_FUNCTION_4, cfg_getint(cfg, "cbush4"));
+        if (cfg_getint(cfg, "cbush5") != -1)
+            eeprom_set_value(ftdi, CBUS_FUNCTION_5, cfg_getint(cfg, "cbush5"));
+        if (cfg_getint(cfg, "cbush6") != -1)
+            eeprom_set_value(ftdi, CBUS_FUNCTION_6, cfg_getint(cfg, "cbush6"));
+        if (cfg_getint(cfg, "cbush7") != -1)
+            eeprom_set_value(ftdi, CBUS_FUNCTION_7, cfg_getint(cfg, "cbush7"));
+        if (cfg_getint(cfg, "cbush8") != -1)
+            eeprom_set_value(ftdi, CBUS_FUNCTION_8, cfg_getint(cfg, "cbush8"));
+        if (cfg_getint(cfg, "cbush9") != -1)
+            eeprom_set_value(ftdi, CBUS_FUNCTION_9, cfg_getint(cfg, "cbush9"));
+    }
+    else if (ftdi->type == TYPE_230X)
+    {
+        if (cfg_getint(cfg, "cbusx0") != -1)
+            eeprom_set_value(ftdi, CBUS_FUNCTION_0, cfg_getint(cfg, "cbusx0"));
+        if (cfg_getint(cfg, "cbusx1") != -1)
+            eeprom_set_value(ftdi, CBUS_FUNCTION_1, cfg_getint(cfg, "cbusx1"));
+        if (cfg_getint(cfg, "cbusx2") != -1)
+            eeprom_set_value(ftdi, CBUS_FUNCTION_2, cfg_getint(cfg, "cbusx2"));
+        if (cfg_getint(cfg, "cbusx3") != -1)
+            eeprom_set_value(ftdi, CBUS_FUNCTION_3, cfg_getint(cfg, "cbusx3"));
+    }
+
     int invert = 0;
     if (cfg_getbool(cfg, "invert_rxd")) invert |= INVERT_RXD;
     if (cfg_getbool(cfg, "invert_txd")) invert |= INVERT_TXD;
