@@ -145,6 +145,20 @@ static void eeprom_get_value(struct ftdi_context *ftdi, enum ftdi_eeprom_value v
     }
 }
 
+static void usage(const char *program)
+{
+    fprintf(stderr, "Syntax: %s [...options...] <config-file>\n", program);
+    fprintf(stderr, "Valid Options:\n");
+    fprintf(stderr, "--device <description>  Specify device to open by description string. One of:\n");
+    fprintf(stderr, "         d:<devicenode>\n");
+    fprintf(stderr, "         i:<vendor>:<product>\n");
+    fprintf(stderr, "         i:<vendor>:<product>:<index>\n");
+    fprintf(stderr, "         s:<vendor>:<product>:<serial>\n");
+    fprintf(stderr, "--read-eeprom           Read eeprom and write to -filename- from config-file\n");
+    fprintf(stderr, "--erase-eeprom          Erase eeprom\n");
+    fprintf(stderr, "--flash-eeprom          Flash eeprom\n");
+}
+
 int main(int argc, char *argv[])
 {
     /*
@@ -205,14 +219,20 @@ int main(int argc, char *argv[])
     /*
     normal variables
     */
-    int _read = 0, _erase = 0, _flash = 0;
+    enum {
+        COMMAND_READ = 1,
+        COMMAND_ERASE,
+        COMMAND_FLASH
+    } command = 0;
+    const char *cfg_filename = NULL;
+    const char *device_description = NULL;
 
     const int max_eeprom_size = 256;
     int my_eeprom_size = 0;
     unsigned char *eeprom_buf = NULL;
     char *filename;
     int size_check;
-    int i, argc_filename;
+    int i;
     FILE *fp;
 
     struct ftdi_context *ftdi = NULL;
@@ -220,37 +240,46 @@ int main(int argc, char *argv[])
     printf("\nFTDI eeprom generator v%s\n", EEPROM_VERSION_STRING);
     printf ("(c) Intra2net AG and the libftdi developers <opensource@intra2net.com>\n");
 
-    if (argc != 2 && argc != 3)
-    {
-        printf("Syntax: %s [commands] config-file\n", argv[0]);
-        printf("Valid commands:\n");
-        printf("--read-eeprom  Read eeprom and write to -filename- from config-file\n");
-        printf("--erase-eeprom  Erase eeprom\n");
-        printf("--flash-eeprom  Flash eeprom\n");
-        exit (-1);
-    }
-
-    if (argc == 3)
-    {
-        if (strcmp(argv[1], "--read-eeprom") == 0)
-            _read = 1;
-        else if (strcmp(argv[1], "--erase-eeprom") == 0)
-            _erase = 1;
-        else if (strcmp(argv[1], "--flash-eeprom") == 0)
-            _flash = 1;
+    for (i = 1; i < argc; i++) {
+        if (*argv[i] != '-')
+        {
+            cfg_filename = argv[i];
+        }
+        else if (!strcmp(argv[i], "--device"))
+        {
+            if (i+1 >= argc)
+            {
+                usage(argv[0]);
+                exit(-1);
+            }
+            device_description = argv[++i];
+        }
+        else if (!strcmp(argv[i], "--read-eeprom"))
+        {
+            command = COMMAND_READ;
+        }
+        else if (!strcmp(argv[i], "--erase-eeprom"))
+        {
+            command = COMMAND_ERASE;
+        }
+        else if (!strcmp(argv[i], "--flash-eeprom"))
+        {
+            command = COMMAND_FLASH;
+        }
         else
         {
-            printf ("Can't open configuration file\n");
-            exit (-1);
+            usage(argv[0]);
+            exit(-1);
         }
-        argc_filename = 2;
-    }
-    else
-    {
-        argc_filename = 1;
     }
 
-    if ((fp = fopen(argv[argc_filename], "r")) == NULL)
+    if (!cfg_filename)
+    {
+        usage(argv[0]);
+        exit(-1);
+    }
+
+    if ((fp = fopen(cfg_filename, "r")) == NULL)
     {
         printf ("Can't open configuration file\n");
         exit (-1);
@@ -258,7 +287,7 @@ int main(int argc, char *argv[])
     fclose (fp);
 
     cfg = cfg_init(opts, 0);
-    cfg_parse(cfg, argv[argc_filename]);
+    cfg_parse(cfg, cfg_filename);
     filename = cfg_getstr(cfg, "filename");
 
     if (cfg_getbool(cfg, "self_powered") && cfg_getint(cfg, "max_power") > 0)
@@ -271,7 +300,19 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     }
 
-    if (_read > 0 || _erase > 0 || _flash > 0)
+    if (device_description != NULL)
+    {
+        i = ftdi_usb_open_string(ftdi, device_description);
+
+        if (i != 0)
+        {
+            printf("Unable to find FTDI device with description: %s\n",
+                   device_description);
+            printf("Error code: %d (%s)\n", i, ftdi_get_error_string(ftdi));
+            exit (-1);
+        }
+    }
+    else if (command > 0)
     {
         int vendor_id = cfg_getint(cfg, "vendor_id");
         int product_id = cfg_getint(cfg, "product_id");
@@ -301,7 +342,7 @@ int main(int argc, char *argv[])
     eeprom_get_value(ftdi, CHIP_SIZE, &my_eeprom_size);
     printf("EEPROM size: %d\n", my_eeprom_size);
 
-    if (_read > 0)
+    if (command == COMMAND_READ)
     {
         ftdi_eeprom_decode(ftdi, 0 /* debug: 1 */);
 
@@ -414,7 +455,7 @@ int main(int argc, char *argv[])
     eeprom_set_value(ftdi, CHANNEL_C_RS485, 0);
     eeprom_set_value(ftdi, CHANNEL_D_RS485, 0);
 
-    if (_erase > 0)
+    if (command == COMMAND_ERASE)
     {
         printf("FTDI erase eeprom: %d\n", ftdi_erase_eeprom(ftdi));
     }
@@ -424,20 +465,20 @@ int main(int argc, char *argv[])
 
     if (size_check == -1)
     {
-        printf ("Sorry, the eeprom can only contain 128 bytes (100 bytes for your strings).\n");
-        printf ("You need to short your string by: %d bytes\n", size_check);
+        printf ("Sorry, the eeprom can only contain 128 bytes.\n");
         goto cleanup;
     }
     else if (size_check < 0)
     {
         printf ("ftdi_eeprom_build(): error: %d\n", size_check);
+        goto cleanup;
     }
     else
     {
         printf ("Used eeprom space: %d bytes\n", my_eeprom_size-size_check);
     }
 
-    if (_flash > 0)
+    if (command == COMMAND_FLASH)
     {
         if (cfg_getbool(cfg, "flash_raw"))
         {
@@ -488,7 +529,7 @@ int main(int argc, char *argv[])
 cleanup:
     if (eeprom_buf)
         free(eeprom_buf);
-    if (_read > 0 || _erase > 0 || _flash > 0)
+    if (command > 0)
     {
         printf("FTDI close: %d\n", ftdi_usb_close(ftdi));
     }
