@@ -3684,7 +3684,7 @@ int ftdi_get_eeprom_value(struct ftdi_context *ftdi, enum ftdi_eeprom_value valu
             *value = ftdi->eeprom->cbus_function[8];
             break;
         case CBUS_FUNCTION_9:
-            *value = ftdi->eeprom->cbus_function[8];
+            *value = ftdi->eeprom->cbus_function[9];
             break;
         case HIGH_CURRENT:
             *value = ftdi->eeprom->high_current;
