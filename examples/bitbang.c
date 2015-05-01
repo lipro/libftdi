@@ -79,4 +79,5 @@ int main(int argc, char **argv)
 
     ftdi_usb_close(&ftdic);
     ftdi_deinit(&ftdic);
+    return 0;
 }

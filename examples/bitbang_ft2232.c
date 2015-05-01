@@ -102,4 +102,5 @@ int main(int argc, char **argv)
     ftdi_disable_bitbang(&ftdic2);
     ftdi_usb_close(&ftdic2);
     ftdi_deinit(&ftdic2);
+    return 0;
 }
