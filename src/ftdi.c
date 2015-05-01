@@ -1265,7 +1265,7 @@ int ftdi_write_data(struct ftdi_context *ftdi, unsigned char *buf, int size)
 }
 
 #ifdef LIBFTDI_LINUX_ASYNC_MODE
-#ifdef USB_CLASS_PTP
+#if 0 /*def USB_CLASS_PTP*/
 #error LIBFTDI_LINUX_ASYNC_MODE is not compatible with libusb-compat-0.1!
 #endif
 /* this is strongly dependent on libusb using the same struct layout. If libusb
