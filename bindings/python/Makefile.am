@@ -36,7 +36,7 @@ install-exec-local:
 		$(PYTHON) setup.py install --prefix="$$NATIVE_WINDOWS_PREFIX" \
 	  ;; \
 	  *) \
-		CPPFLAGS="$(CPPFLAGS)" $(PYTHON) setup.py install --prefix=$(DESTDIR)$(prefix) \
+		CPPFLAGS="$(CPPFLAGS)" $(PYTHON) setup.py install --install-layout=deb --prefix=$(DESTDIR)$(prefix) \
 	  ;; \
 	esac;
 
