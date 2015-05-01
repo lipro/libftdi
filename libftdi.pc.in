@@ -5,8 +5,9 @@ includedir=@includedir@
 
 Name: libftdi
 Description: Library to program and control the FTDI USB controller
-Requires:
 Version: @VERSION@
-Libs: -L${libdir} -lftdi -lusb
+
+@PKGCONFIG_REQUIRES@: libusb
+Libs: -L${libdir} -lftdi
 Cflags: -I${includedir}
 
