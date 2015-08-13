@@ -109,6 +109,35 @@ static int parse_cbusx(cfg_t *cfg, cfg_opt_t *opt, const char *value, void *resu
     return -1;
 }
 
+static int parse_chtype(cfg_t *cfg, cfg_opt_t *opt, const char *value, void *result)
+{
+    static const struct
+    {
+        char* key;
+	int   opt;
+    } options[] =
+    {
+        { "UART",   CHANNEL_IS_UART },
+        { "FIFO",   CHANNEL_IS_FIFO },
+        { "OPTO",   CHANNEL_IS_OPTO },
+        { "CPU",    CHANNEL_IS_CPU },
+        { "FT1284", CHANNEL_IS_FT1284}
+    };
+
+    int i;
+    for (i=0; i<sizeof(options)/sizeof(*options); i++)
+    {
+        if (!(strcmp(options[i].key, value)))
+        {
+            *(int *)result = options[i].opt;
+            return 0;
+        }
+    }
+
+    cfg_error(cfg, "Invalid %s option '%s'", cfg_opt_name(opt), value);
+    return -1;
+}
+
 /**
  * @brief Set eeprom value
  *
@@ -212,6 +241,16 @@ int main(int argc, char *argv[])
         CFG_BOOL("invert_dsr", cfg_false, 0),
         CFG_BOOL("invert_dcd", cfg_false, 0),
         CFG_BOOL("invert_ri", cfg_false, 0),
+        CFG_INT_CB("cha_type", -1, 0, parse_chtype),
+        CFG_INT_CB("chb_type", -1, 0, parse_chtype),
+        CFG_BOOL("cha_vcp", cfg_true, 0),
+        CFG_BOOL("chb_vcp", cfg_true, 0),
+        CFG_BOOL("chc_vcp", cfg_true, 0),
+        CFG_BOOL("chd_vcp", cfg_true, 0),
+        CFG_BOOL("cha_rs485", cfg_false, 0),
+        CFG_BOOL("chb_rs485", cfg_false, 0),
+        CFG_BOOL("chc_rs485", cfg_false, 0),
+        CFG_BOOL("chd_rs485", cfg_false, 0),
         CFG_END()
     };
     cfg_t *cfg;
@@ -446,14 +485,24 @@ int main(int argc, char *argv[])
     if (cfg_getbool(cfg, "invert_ri")) invert |= INVERT_RI;
     eeprom_set_value(ftdi, INVERT, invert);
 
-    eeprom_set_value(ftdi, CHANNEL_A_DRIVER, DRIVER_VCP);
-    eeprom_set_value(ftdi, CHANNEL_B_DRIVER, DRIVER_VCP);
-    eeprom_set_value(ftdi, CHANNEL_C_DRIVER, DRIVER_VCP);
-    eeprom_set_value(ftdi, CHANNEL_D_DRIVER, DRIVER_VCP);
-    eeprom_set_value(ftdi, CHANNEL_A_RS485, 0);
-    eeprom_set_value(ftdi, CHANNEL_B_RS485, 0);
-    eeprom_set_value(ftdi, CHANNEL_C_RS485, 0);
-    eeprom_set_value(ftdi, CHANNEL_D_RS485, 0);
+    if (cfg_getint(cfg, "cha_type") != -1)
+        eeprom_set_value(ftdi, CHANNEL_A_TYPE, cfg_getint(cfg, "cha_type"));
+    if (cfg_getint(cfg, "chb_type") != -1)
+        eeprom_set_value(ftdi, CHANNEL_B_TYPE, cfg_getint(cfg, "chb_type"));
+
+    eeprom_set_value(ftdi, CHANNEL_A_DRIVER,
+                     cfg_getbool(cfg, "cha_vcp") ? DRIVER_VCP : 0);
+    eeprom_set_value(ftdi, CHANNEL_B_DRIVER,
+                     cfg_getbool(cfg, "chb_vcp") ? DRIVER_VCP : 0);
+    eeprom_set_value(ftdi, CHANNEL_C_DRIVER,
+                     cfg_getbool(cfg, "chc_vcp") ? DRIVER_VCP : 0);
+    eeprom_set_value(ftdi, CHANNEL_D_DRIVER,
+                     cfg_getbool(cfg, "chd_vcp") ? DRIVER_VCP : 0);
+
+    eeprom_set_value(ftdi, CHANNEL_A_RS485, cfg_getbool(cfg, "cha_rs485"));
+    eeprom_set_value(ftdi, CHANNEL_B_RS485, cfg_getbool(cfg, "chb_rs485"));
+    eeprom_set_value(ftdi, CHANNEL_C_RS485, cfg_getbool(cfg, "chc_rs485"));
+    eeprom_set_value(ftdi, CHANNEL_D_RS485, cfg_getbool(cfg, "chd_rs485"));
 
     if (command == COMMAND_ERASE)
     {
