@@ -34,8 +34,8 @@ target_link_libraries(ftdi1 ${LIBUSB_LIBRARIES})
 
 install ( TARGETS ftdi1
           RUNTIME DESTINATION bin
-          LIBRARY DESTINATION lib${LIB_SUFFIX}
-          ARCHIVE DESTINATION lib${LIB_SUFFIX}
+          LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+          ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         )
 
 if ( STATICLIBS )
@@ -44,7 +44,7 @@ if ( STATICLIBS )
   set_target_properties(ftdi1-static PROPERTIES OUTPUT_NAME "ftdi1")
   set_target_properties(ftdi1-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
   install ( TARGETS ftdi1-static
-            ARCHIVE DESTINATION lib${LIB_SUFFIX}
+            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
             COMPONENT staticlibs
           )
 endif ()

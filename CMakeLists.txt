@@ -160,7 +160,7 @@ set(exec_prefix ${CMAKE_INSTALL_PREFIX}/bin)
 set(includedir  ${CMAKE_INSTALL_PREFIX}/include/${PROJECT_NAME})
 
 if(${UNIX})
-   set(libdir      ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
+   set(libdir      ${CMAKE_INSTALL_LIBDIR})
 endif(${UNIX})
 if(${WIN32})
    set(libdir      ${CMAKE_INSTALL_PREFIX}/bin)
@@ -170,7 +170,7 @@ configure_file(${CMAKE_SOURCE_DIR}/libftdi1.spec.in ${CMAKE_BINARY_DIR}/libftdi1
 configure_file(${CMAKE_SOURCE_DIR}/libftdi1.pc.in ${CMAKE_BINARY_DIR}/libftdi1.pc @ONLY)
 configure_file(${CMAKE_SOURCE_DIR}/libftdipp1.pc.in ${CMAKE_BINARY_DIR}/libftdipp1.pc @ONLY)
 install(FILES ${CMAKE_BINARY_DIR}/libftdi1.pc ${CMAKE_BINARY_DIR}/libftdipp1.pc
-        DESTINATION lib${LIB_SUFFIX}/pkgconfig)
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
 if (UNIX OR MINGW)
   configure_file ( libftdi1-config.in ${CMAKE_CURRENT_BINARY_DIR}/libftdi1-config @ONLY )
@@ -180,7 +180,7 @@ endif ()
 
 # config script install path
 if ( NOT DEFINED LIBFTDI_CMAKE_CONFIG_DIR )
-  set ( LIBFTDI_CMAKE_CONFIG_DIR lib${LIB_SUFFIX}/cmake/libftdi1 )
+  set ( LIBFTDI_CMAKE_CONFIG_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/libftdi1 )
 endif ()
 
 set ( LIBFTDI_INCLUDE_DIR ${includedir} )

@@ -38,8 +38,8 @@ if (FTDIPP)
     
     install ( TARGETS ftdipp1
               RUNTIME DESTINATION bin
-              LIBRARY DESTINATION lib${LIB_SUFFIX}
-              ARCHIVE DESTINATION lib${LIB_SUFFIX}
+              LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+              ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
             )
             
     # Static library
@@ -49,7 +49,7 @@ if (FTDIPP)
       set_target_properties(ftdipp1-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 
       install ( TARGETS ftdipp1-static
-                ARCHIVE DESTINATION lib${LIB_SUFFIX}
+                ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
                 COMPONENT staticlibs
               )
     endif ()
