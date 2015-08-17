@@ -12,13 +12,25 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <boost/version.hpp>
+
+#if BOOST_VERSION > 103301
+#if BOOST_VERSION > 103500
 #define BOOST_TEST_DYN_LINK
+#endif
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
+#else
+#define BOOST_AUTO_TEST_MAIN
+#include <boost/test/auto_unit_test.hpp>
+#endif
 
 #include <ftdi.h>
 
 BOOST_AUTO_TEST_SUITE(Basic)
+#if BOOST_VERSION < 103400
+;
+#endif
 
 BOOST_AUTO_TEST_CASE(SimpleInit)
 {
@@ -31,3 +43,6 @@ BOOST_AUTO_TEST_CASE(SimpleInit)
 }
 
 BOOST_AUTO_TEST_SUITE_END()
+#if BOOST_VERSION < 103400
+;
+#endif

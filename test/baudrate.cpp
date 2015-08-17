@@ -14,7 +14,12 @@
 
 #include <ftdi.h>
 
+#include <boost/version.hpp>
+
+#if BOOST_VERSION > 103301
+#if BOOST_VERSION > 103500
 #define BOOST_TEST_DYN_LINK
+#endif
 #include <boost/test/unit_test.hpp>
 #include <boost/foreach.hpp>
 #include <vector>
@@ -265,3 +270,4 @@ BOOST_AUTO_TEST_CASE(TypeHFixedBaudrates)
 }
 
 BOOST_AUTO_TEST_SUITE_END()
+#endif
