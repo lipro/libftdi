@@ -10,6 +10,10 @@
 %{
 #include "Python.h"
 
+#if PY_VERSION_HEX < 0x02050000
+typedef int Py_ssize_t;
+#endif
+
 PyObject* convertString( const char *v, Py_ssize_t len )
 {
 #if PY_MAJOR_VERSION >= 3
