@@ -33,7 +33,7 @@ if (FTDIPP)
     set_target_properties(ftdipp1 PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 
     # Dependencies
-    target_link_libraries(ftdipp1 ftdi1 ${LIBUSB_LIBRARIES} ${BOOST_LIBRARIES})
+    target_link_libraries(ftdipp1 ftdi1 ${LIBUSB_LIBRARIES} ${BOOST_LIBRARIES} c)
 
     
     install ( TARGETS ftdipp1
