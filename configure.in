@@ -101,7 +101,7 @@ AM_PATH_PYTHON([2.0],
 on.org])])
 if test "$PYTHON"
 then
-     python_include_path=`$PYTHON -c "import distutils.sysconfig; print distutils.sysconfig.get_python_inc();"`
+     python_include_path=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_python_inc());"`
      AC_CHECK_HEADERS([${python_include_path}/Python.h],
                       [have_python_header=true],
                       [AC_MSG_WARN([Python.h header file not found. Python development files are required to build presage python binding. Pyt
