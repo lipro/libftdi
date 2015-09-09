@@ -131,12 +131,13 @@ struct ftdi_context *ftdi_new(void)
 
     if (ftdi == NULL)
     {
-        return NULL;
+        ftdi_error_return(NULL, "Can't malloc struct ftdi_context");
     }
 
     if (ftdi_init(ftdi) != 0)
     {
         free(ftdi);
+        ftdi_error_return(NULL, "ftdi_init() failed");
         return NULL;
     }
 
